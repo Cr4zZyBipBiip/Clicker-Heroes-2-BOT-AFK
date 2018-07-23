@@ -35,6 +35,16 @@
       "r": 57,
       "g": 97,
       "b": 136
+    },
+    "piece_color":{
+      "r": 182,
+      "g": 67,
+      "b": 69
+    },
+    "the_fish_color":{
+      "r": 240,
+      "g": 184,
+      "b": 69
     }
   },
   "timers": {
@@ -74,13 +84,37 @@
     "x": 1174,
     "y": 1033
   },
-  "totem_mana":{
+  "totem_mana_droite":{
     "x": 1500,
     "y": 500
+  },
+  "totem_mana_gauche":{
+    "x": 1180,
+    "y": 370
   },
   "can_reload":{
     "x": 1249,
     "y": 845
+  },
+  "piece_right_1":{
+    "x": 1029,
+    "y": 818
+  },
+  "piece_right_2":{
+    "x": 1294,
+    "y": 685
+  },
+  "piece_right_3":{
+    "x": 1558,
+    "y": 553
+  },
+  "piece_right_4":{
+    "x": 1144,
+    "y": 451
+  },
+  "the_fish_right":{
+    "x": 1101,
+    "y": 704
   },
   "accessoires":[
     {

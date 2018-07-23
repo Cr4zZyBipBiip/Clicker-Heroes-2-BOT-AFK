@@ -39,11 +39,29 @@ def getConfig():
         data = json.load(data_file)
     return data
 
-def getpixel(x, y):
-    return pyautogui.screenshot().getpixel((x, y))
+global screen
 
-def pixelMatchesColor(x, y, expectedRGBColor, tolerance=0):
-    pix = getpixel(x,y)
+def initScreen():
+    screen = pyautogui.screenshot()
+
+initScreen()
+
+def getpixel(x, y, newshot):
+    #print('New Screen')
+    return pyautogui.screenshot().getpixel((x, y))
+    # else:
+    #     try:
+    #         #print('Old Screen')
+    #         return screen.getpixel((x, y))
+    #     except NameError:
+    #         #print('New Screen')
+    #         return pyautogui.screenshot().getpixel((x, y))
+
+
+
+
+def pixelMatchesColor(x, y, expectedRGBColor, tolerance=0, newshot=True):
+    pix = getpixel(x,y, newshot)
     if len(pix) == 3 or len(expectedRGBColor) == 3:  # RGB mode
         r, g, b = pix[:3]
         exR, exG, exB = expectedRGBColor[:3]
@@ -79,15 +97,15 @@ def killGame():
 
 def matchesButton(position):
     if pixelMatchesColor(position[0], position[1], white_button,
-                      tolerance=color_tolerance) or pixelMatchesColor(position[0],
+                      tolerance=color_tolerance,newshot=False) or pixelMatchesColor(position[0],
                                                                       position[1],
                                                                       gray_button,
-                                                                      tolerance=color_tolerance) \
+                                                                      tolerance=color_tolerance,newshot=False) \
     or pixelMatchesColor(position[0],
                          position[1],
                          super_white_button,
-                         tolerance=color_tolerance) or pixelMatchesColor(
-        position[0], position[1], energy_jar_color, tolerance=color_tolerance):
+                         tolerance=color_tolerance,newshot=False) or pixelMatchesColor(
+        position[0], position[1], energy_jar_color, tolerance=color_tolerance,newshot=False):
         return True
     return False
 
@@ -134,10 +152,14 @@ buy_new_stuff_position = (config['buy_new_stuff']['x'], config['buy_new_stuff'][
 energy_jar_position_top = (config['energy_jar_position_top']['x'], config['energy_jar_position_top']['y'])
 energy_jar_position_bottom = (config['energy_jar_position_bottom']['x'], config['energy_jar_position_bottom']['y'])
 reload_battery_position = (config['reload_battery_position']['x'], config['reload_battery_position']['y'])
-totem_mana_position = (config['totem_mana']['x'], config['totem_mana']['y'])
+totem_mana_position_droite = (config['totem_mana_droite']['x'], config['totem_mana_droite']['y'])
+totem_mana_position_gauche = (config['totem_mana_gauche']['x'], config['totem_mana_gauche']['y'])
 can_reload_position = (config['can_reload']['x'], config['can_reload']['y'])
-
-
+the_fish_right = (config['the_fish_right']['x'], config['the_fish_right']['y'])
+piece_right_1 = (config['piece_right_1']['x'], config['piece_right_1']['y'])
+piece_right_2 = (config['piece_right_2']['x'], config['piece_right_2']['y'])
+piece_right_3 = (config['piece_right_3']['x'], config['piece_right_3']['y'])
+piece_right_4 = (config['piece_right_4']['x'], config['piece_right_4']['y'])
 
 # Reading timings
 wait_after_killing_a_game = config["timers"]["wait_after_killing_a_game"]
@@ -161,25 +183,31 @@ ruby_color = getColor(config, "ruby_color")
 can_buy_color = getColor(config, "buy_upgrade_color")
 totem_mana_color = getColor(config, "totem_mana_color")
 can_reload_color = getColor(config, "can_reload_color")
+the_fish_color = getColor(config, "the_fish_color")
+piece_color = getColor(config, "piece_color")
+
+
 
 def CheckIfPause():
-    if pixelMatchesColor(text_position[0], text_position[1], super_white_button, tolerance=color_tolerance):
+    #print('CheckIfPause')
+    if pixelMatchesColor(text_position[0], text_position[1], super_white_button, tolerance=color_tolerance,newshot=True):
         print('Jeu actuellement en pause')
         pyautogui.click(resume_button_position[0], resume_button_position[1])
 
 def CheckTabNeeded():
+    #print('CheckTabNeeded')
     CheckIfPause()
-    isTotemMana()
-    if pixelMatchesColor(ruby_position[0], ruby_position[1], ruby_color, tolerance=color_tolerance):
+    if pixelMatchesColor(ruby_position[0], ruby_position[1], ruby_color, tolerance=color_tolerance,newshot=True):
         # pyautogui.press('tab')
         print('wait')
         time.sleep(animation_delay)
 
 def CheckBetterUpgradeAvalaible(checkNumber):
+    #print('CheckBetterUpgradeAvalaible')
     CheckTabNeeded()
     numb = 1
     for access in config['accessoires']:
-        if pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance):
+        if pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance,newshot=False):
             if numb < checkNumber:
                 return True
             else:
@@ -187,18 +215,16 @@ def CheckBetterUpgradeAvalaible(checkNumber):
         numb += 1
 
 def BuyUpgrade():
+    #print('BuyUpgrade')
     CheckTabNeeded()
-    isTotemMana()
-    ReloadBattery()
     number = 1
     for access in config['accessoires']:
-        if pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance):
+        if pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance,newshot=False):
             print('{}. {}'.format(number, access['name']))
-            while pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance):
+            while pixelMatchesColor(access['x'], access['y'], can_buy_color, tolerance=color_tolerance,newshot=False):
                 BuyNewStuff()
+                #print('BuyedUpgrade')
                 pyautogui.click(access['x'], access['y'])
-                isTotemMana()
-                ReloadBattery()
                 # if CheckBetterUpgradeAvalaible(number) == True:
                     # break
             break
@@ -206,33 +232,69 @@ def BuyUpgrade():
     BuyNewStuff()
 
 def BuyNewStuff():
+    #print('BuyNewStuff')
     CheckTabNeeded()
-    if pixelMatchesColor(buy_new_stuff_position[0], buy_new_stuff_position[1], can_buy_color, tolerance=color_tolerance):
+    if pixelMatchesColor(buy_new_stuff_position[0], buy_new_stuff_position[1], can_buy_color, tolerance=color_tolerance,newshot=True):
+        #print('BuyedNewStuff')
         pyautogui.click(buy_new_stuff_position[0], buy_new_stuff_position[1])
 
 
 def Attack():
+    #print('Attack')
     CheckIfPause()
-    while not pixelMatchesColor(energy_jar_position_bottom[0], energy_jar_position_bottom[1], energy_jar_bottom_blue, tolerance=5):
+    isImportantItem()
+    #print('Spell Attack')
+    pyautogui.click(1275, 1035)
+    while not pixelMatchesColor(energy_jar_position_bottom[0], energy_jar_position_bottom[1], energy_jar_bottom_blue, tolerance=5,newshot=False):
         i = 0
         while i < 10:
-            isTotemMana()
+            #print('Attacked')
             pyautogui.press('w')
             i += 1
         ReloadBattery()
         BuyUpgrade()
 
 def ReloadBattery():
+    #print('ReloadBattery')
     CheckIfPause()
-    if not pixelMatchesColor(can_reload_position[0], can_reload_position[1], can_reload_color, tolerance=5) and not pixelMatchesColor(reload_battery_position[0], reload_battery_position[1], super_white_button, tolerance=5):
-            pyautogui.click(reload_battery_position[0], reload_battery_position[1])
+    if not pixelMatchesColor(can_reload_position[0], can_reload_position[1], can_reload_color, tolerance=5,newshot=False) and not pixelMatchesColor(reload_battery_position[0], reload_battery_position[1], super_white_button, tolerance=5,newshot=True):
+        #print('BatteryReloaded')
+        pyautogui.click(reload_battery_position[0], reload_battery_position[1])
 
-
+def isImportantItem():
+    #print('isImportantItem')
+    if pixelMatchesColor(the_fish_right[0], the_fish_right[1], the_fish_color, tolerance=color_tolerance,newshot=True):
+        #print('Founded item')
+        pyautogui.click(the_fish_right[0], the_fish_right[1])
+    elif pixelMatchesColor(piece_right_1[0], piece_right_1[1], piece_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(piece_right_1[0], piece_right_1[1])
+    elif pixelMatchesColor(piece_right_2[0], piece_right_2[1], piece_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(piece_right_2[0], piece_right_2[1])
+    elif pixelMatchesColor(piece_right_3[0], piece_right_3[1], piece_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(piece_right_3[0], piece_right_3[1])
+    elif pixelMatchesColor(piece_right_4[0], piece_right_4[1], piece_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(piece_right_4[0], piece_right_4[1])
+    elif pixelMatchesColor(piece_right_4[0], piece_right_4[1], piece_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(piece_right_4[0], piece_right_4[1])
+    else:
+        isTotemMana()
 
 def isTotemMana():
-    if pixelMatchesColor(totem_mana_position[0], totem_mana_position[1], totem_mana_color, tolerance=color_tolerance):
-        pyautogui.click(totem_mana_position[0], totem_mana_position[1])
+    #print('isTotemMana')
+    if pixelMatchesColor(totem_mana_position_droite[0], totem_mana_position_droite[1], totem_mana_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(totem_mana_position_droite[0], totem_mana_position_droite[1])
         ReloadBattery()
+    elif pixelMatchesColor(totem_mana_position_gauche[0], totem_mana_position_gauche[1], totem_mana_color, tolerance=color_tolerance,newshot=False):
+        #print('Founded item')
+        pyautogui.click(totem_mana_position_gauche[0], totem_mana_position_gauche[1])
+        ReloadBattery()
+
 
 
 # class Attack(Thread):
@@ -243,7 +305,7 @@ def isTotemMana():
 #     def run(self):
 #         while True:
 #             if keyboard.is_pressed('d'):#if key 'q' is pressed
-#                 print('You Pressed D Key!')
+#                 #print('You Pressed D Key!')
 #                 break#finishing the loop
 #             else:
 #                 pyautogui.press('w')
@@ -280,9 +342,9 @@ while (1):
         except Exception as ex:
             print('Something went wrong while starting ClickerHeroes2... Error message: {}'.format(ex))
     elif state == play_state:
+        #print('On recommence')
         CheckIfPause()
         CheckTabNeeded()
-        isTotemMana()
         BuyNewStuff()
         BuyUpgrade()
         Attack()
