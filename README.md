@@ -25,5 +25,4 @@ It auto click, auto upgrade, auto buy...
                                               _//       _//
                                              /_|       /_|
 
-
 Made By Cr4zZyBipBiip
