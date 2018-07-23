@@ -24,15 +24,9 @@ from pytesseract import image_to_string
 CH2_url = 'steam://rungameid/629910'
 
 PROCNAME = "ClickerHeroes2.exe"
-CRASH_PROCNAME = "BroCrashReporter.exe"
-debug_directory = "debug_screenshots"
 start_state = "HELLO"
 play_state = "PLAYING"
 play_timer_max = 60 * 3
-matching_state = "MATCHING"
-matching_timer_max = 60 * 3
-loading_state = "LOADING"
-loading_timer_max = 60 * 3
 
 state = start_state
 takeScrenshot = False
@@ -160,18 +154,9 @@ def getColor(config, name):
 
 
 color_tolerance = config["color_tolerance"]
-dark_play_color = getColor(config, "dark_play_color")
-play_color = getColor(config, "play_color")
-matching_color = getColor(config, "matching_color")
-matching_tick_color = getColor(config, "matching_tick_color")
-white_button = getColor(config, "white_button")
-gray_button = getColor(config, "gray_button")
 energy_jar_top_white = getColor(config, "energy_jar_top_white")
 energy_jar_bottom_blue = getColor(config, "energy_jar_bottom_blue")
 super_white_button = getColor(config, "super_white_button")
-windows_background = getColor(config, "windows_background")
-exit_button_color = getColor(config, "exit_button_color")
-reconnect_button_color = getColor(config, "reconnect_button_color")
 ruby_color = getColor(config, "ruby_color")
 can_buy_color = getColor(config, "buy_upgrade_color")
 totem_mana_color = getColor(config, "totem_mana_color")
@@ -278,30 +263,14 @@ def isTotemMana():
 
 # Game info
 while (1):
-    # try:
-    #     for proc in psutil.process_iter():
-    #         # check whether the process name matches
-    #         if proc.name() == CRASH_PROCNAME:
-    #             print('Fucking bugs in PUBG. Trying to avoid them!')
-    #             proc.kill()
-    #             killGame()
-    #             time.sleep(wait_after_killing_a_game)
-    #             changeState(start_state)
-    # except Exception as ex:
-    #     print('Something went wrong while killing bug reporter... Error message: {}'.format(ex))
     if state == start_state:
-        # img = Image.open('C:/Users/Cr4zZyBipBiip/Downloads/botpubg-mpgh_mpgh.net/BOTClickHeroe2/test2.png')
-        # text = image_to_string(img)
-        # print(text)
-
-
         try:
             already_lauch = False
             for proc in psutil.process_iter():
                 if proc.name() == PROCNAME:
                     already_lauch = True
             if already_lauch:
-                changeState(loading_state)
+                changeState(play_state)
                 print("ClickerHeroes2 already launched")
             else:
                 print("ClickerHeroes2 need to be launched")
@@ -310,7 +279,7 @@ while (1):
                 changeState(start_state)
         except Exception as ex:
             print('Something went wrong while starting ClickerHeroes2... Error message: {}'.format(ex))
-    elif state == loading_state:
+    elif state == play_state:
         CheckIfPause()
         CheckTabNeeded()
         isTotemMana()
