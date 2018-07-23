@@ -1,0 +1,177 @@
+{
+  "color_tolerance": 15,
+  "colors":{
+    "dark_play_color":{
+      "r": 123,
+      "g": 98,
+      "b": 42
+    },
+    "play_color":{
+      "r": 232,
+      "g": 180,
+      "b": 70
+    },
+    "matching_color":{
+      "r": 121,
+      "g": 88,
+      "b": 24
+    },
+    "matching_tick_color":{
+      "r": 0,
+      "g": 0,
+      "b": 0
+    },
+    "text_start_color":{
+      "r": 160,
+      "g": 255,
+      "b": 226
+    },
+    "white_button":{
+      "r": 129,
+      "g": 129,
+      "b": 129
+    },
+    "super_white_button":{
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "gray_button":{
+      "r": 83,
+      "g": 83,
+      "b": 83
+    },
+    "energy_jar_top_white":{
+      "r": 250,
+      "g": 249,
+      "b": 254
+    },
+    "energy_jar_bottom_blue":{
+      "r": 43,
+      "g": 93,
+      "b": 138
+    },
+    "windows_background":{
+      "r": 255,
+      "g": 255,
+      "b": 255
+    },
+    "exit_button_color":{
+      "r": 179,
+      "g": 179,
+      "b": 179
+    },
+    "reconnect_button_color":{
+      "r": 231,
+      "g": 164,
+      "b": 0
+    },
+    "ruby_color":{
+      "r": 247,
+      "g": 92,
+      "b": 126
+    },
+    "buy_upgrade_color":{
+      "r": 191,
+      "g": 203,
+      "b": 228
+    },
+    "totem_mana_color":{
+      "r": 222,
+      "g": 241,
+      "b": 255
+    },
+    "can_reload_color":{
+      "r": 57,
+      "g": 97,
+      "b": 136
+    }
+  },
+  "timers": {
+    "wait_after_killing_a_game": 2,
+    "start_delay": 45,
+    "animation_delay": 1,
+    "wait_for_players": 40,
+    "wait_for_plain": 10,
+    "exit_animation_delay": 1.5,
+    "loading_delay": 3
+  },
+  "text":{
+    "x": 490,
+    "y": 235
+  },
+  "resume_button_position":{
+    "x": 490,
+    "y": 235
+  },
+  "ruby_position":{
+    "x": 22,
+    "y": 105
+  },
+  "buy_new_stuff":{
+    "x": 550,
+    "y": 730
+  },
+  "energy_jar_position_top":{
+    "x": 940,
+    "y": 846
+  },
+  "energy_jar_position_bottom":{
+    "x": 996,
+    "y": 980
+  },
+  "reload_battery_position":{
+    "x": 1174,
+    "y": 1033
+  },
+  "totem_mana":{
+    "x": 1500,
+    "y": 500
+  },
+  "can_reload":{
+    "x": 1249,
+    "y": 845
+  },
+  "accessoires":[
+    {
+      "name": "Cape",
+      "x": 800,
+      "y": 530
+    },
+    {
+      "name": "Chaussure",
+      "x": 40,
+      "y": 530
+    },
+    {
+      "name": "Gants",
+      "x": 800,
+      "y": 400
+    },
+    {
+      "name": "Pantalon",
+      "x": 40,
+      "y": 400
+    },
+    {
+      "name": "Bague",
+      "x": 800,
+      "y": 280
+    },
+    {
+      "name": "Armure",
+      "x": 40,
+      "y": 275
+    },
+    {
+      "name": "Casque",
+      "x": 800,
+      "y": 150
+    },
+    {
+      "name": "Epée",
+      "x": 40,
+      "y": 150
+    }
+  ]
+}
